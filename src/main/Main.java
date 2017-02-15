@@ -53,6 +53,11 @@ public class Main {
                     e.printStackTrace();
                 }
                 System.out.println("New Thread Closed\n");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
         });
