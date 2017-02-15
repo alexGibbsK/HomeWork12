@@ -49,7 +49,7 @@ public class Main {
             @Override
             public void run() {
                 System.out.println("\nNew Thread Started, thread id: " + Thread.currentThread().getId());
-                System.out.println("Number of threads while Asynk method runs: " + ManagementFactory.getThreadMXBean().getThreadCount());
+                //System.out.println("Number of threads while Asynk method runs: " + ManagementFactory.getThreadMXBean().getThreadCount());
                 try {
                     method.invoke(myClass.newInstance(), null);
                 } catch (IllegalAccessException e) {
@@ -58,13 +58,15 @@ public class Main {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
                     e.printStackTrace();
+                }finally {
+                    System.out.println("Thread #" + Thread.currentThread().getId() + " finished\n");
                 }
-                try {
-                    Thread.sleep(0);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Thread #" + Thread.currentThread().getId() + " finished\n");
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.println("Thread #" + Thread.currentThread().getId() + " finished\n");
             }
         });
     }
