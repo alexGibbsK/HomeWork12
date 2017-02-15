@@ -4,6 +4,7 @@ import annotations.Asynk;
 import annotations.Init;
 import annotations.Service;
 
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -16,6 +17,7 @@ public class Main {
         SomeClass someClass = new SomeClass();
         Class myClass = someClass.getClass();
         Method[] methods = myClass.getMethods();
+        System.out.println("Start of program threads count:" + ManagementFactory.getThreadMXBean().getThreadCount());
 
         if (myClass.isAnnotationPresent(Service.class)) {
             for (Method method :
@@ -28,6 +30,8 @@ public class Main {
                 }
             }
         }
+
+        System.out.println("End of program Threads count: " + ManagementFactory.getThreadMXBean().getThreadCount());
     }
 
     private static Thread getNewThread(final Class myClass, final Method method) {
