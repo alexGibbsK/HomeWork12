@@ -38,7 +38,7 @@ public class Main {
             myThread = getNewThread(myClass, method);
             myThread.start();
             myThread.join();
-            System.out.println("Thread #" + myThread.getId() + " finished\n");
+
         } else if (method.isAnnotationPresent(Init.class)) {
             method.invoke(myClass.newInstance(), null);
         }
@@ -64,6 +64,7 @@ public class Main {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                System.out.println("Thread #" + Thread.currentThread().getId() + " finished\n");
             }
         });
     }
