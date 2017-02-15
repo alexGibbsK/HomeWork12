@@ -60,7 +60,7 @@ public class Main {
                     e.printStackTrace();
                 }
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
