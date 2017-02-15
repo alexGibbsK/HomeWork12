@@ -17,27 +17,31 @@ public class Main {
         SomeClass someClass = new SomeClass();
         Class myClass = someClass.getClass();
         Method[] methods = myClass.getMethods();
-        Thread myThread;
 
         System.out.println("Number of threads on program start: " + ManagementFactory.getThreadMXBean().getThreadCount());
 
         if (myClass.isAnnotationPresent(Service.class)) {
             for (Method method :
                     methods) {
-                if (method.isAnnotationPresent(Init.class) && method.isAnnotationPresent(Asynk.class)) {
-                    System.out.println("Method must be Asynk OR Init, not both of them");
-                } else if (method.isAnnotationPresent(Asynk.class)) {
-                    myThread = getNewThread(myClass, method);
-                    myThread.start();
-                    myThread.join();
-                    System.out.println("Thread #" + myThread.getId() + " finished\n");
-                } else if (method.isAnnotationPresent(Init.class)) {
-                    method.invoke(myClass.newInstance(), null);
-                }
+                checkAnnotation(myClass, method);
             }
         }
 
         System.out.println("Number of threads on program end: " + ManagementFactory.getThreadMXBean().getThreadCount());
+    }
+
+    private static void checkAnnotation(Class myClass, Method method) throws InterruptedException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Thread myThread;
+        if (method.isAnnotationPresent(Init.class) && method.isAnnotationPresent(Asynk.class)) {
+            System.out.println("Method must be Asynk OR Init, not both of them");
+        } else if (method.isAnnotationPresent(Asynk.class)) {
+            myThread = getNewThread(myClass, method);
+            myThread.start();
+            myThread.join();
+            System.out.println("Thread #" + myThread.getId() + " finished\n");
+        } else if (method.isAnnotationPresent(Init.class)) {
+            method.invoke(myClass.newInstance(), null);
+        }
     }
 
     private static Thread getNewThread(final Class myClass, final Method method) {
