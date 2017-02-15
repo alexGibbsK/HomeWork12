@@ -9,7 +9,6 @@ import annotations.Service;
  */
 @Service
 public class SomeClass {
-
     @Init
     public void sayHello(){
         System.out.println("INIT method ");

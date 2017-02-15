@@ -13,11 +13,12 @@ import java.lang.reflect.Method;
  */
 
 public class Main {
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException, InterruptedException {
         SomeClass someClass = new SomeClass();
         Class myClass = someClass.getClass();
         Method[] methods = myClass.getMethods();
         Thread myThread;
+        System.out.println("Number of threads on program start: " + ManagementFactory.getThreadMXBean().getThreadCount());
         if (myClass.isAnnotationPresent(Service.class)) {
             for (Method method :
                     methods) {
@@ -25,13 +26,15 @@ public class Main {
                     System.out.println("Method must be Asynk OR Init, not both of them");
                 } else if (method.isAnnotationPresent(Asynk.class)) {
                     myThread = getNewThread(myClass, method);
-                    myThread.run();
+                    myThread.start();
+                    myThread.join();
                 } else if (method.isAnnotationPresent(Init.class)) {
                     method.invoke(myClass.newInstance(), null);
                 }
             }
         }
 
+        System.out.println("Number of threads on program end: " + ManagementFactory.getThreadMXBean().getThreadCount());
     }
 
     private static Thread getNewThread(final Class myClass, final Method method) {
@@ -39,6 +42,7 @@ public class Main {
             @Override
             public void run() {
                 System.out.println("\nNew Thread Started");
+                System.out.println("Number of threads while Asynk method runs: " + ManagementFactory.getThreadMXBean().getThreadCount());
                 try {
                     method.invoke(myClass.newInstance(), null);
                 } catch (IllegalAccessException e) {
@@ -52,5 +56,6 @@ public class Main {
             }
 
         });
+
     }
 }
