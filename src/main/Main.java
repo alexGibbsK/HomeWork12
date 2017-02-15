@@ -18,7 +18,9 @@ public class Main {
         Class myClass = someClass.getClass();
         Method[] methods = myClass.getMethods();
         Thread myThread;
+
         System.out.println("Number of threads on program start: " + ManagementFactory.getThreadMXBean().getThreadCount());
+
         if (myClass.isAnnotationPresent(Service.class)) {
             for (Method method :
                     methods) {
@@ -28,6 +30,7 @@ public class Main {
                     myThread = getNewThread(myClass, method);
                     myThread.start();
                     myThread.join();
+                    System.out.println("Thread #" + myThread.getId() + " finished\n");
                 } else if (method.isAnnotationPresent(Init.class)) {
                     method.invoke(myClass.newInstance(), null);
                 }
@@ -52,7 +55,6 @@ public class Main {
                 } catch (InstantiationException e) {
                     e.printStackTrace();
                 }
-                System.out.println("New Thread Closed\n");
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
