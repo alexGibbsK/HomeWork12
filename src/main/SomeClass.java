@@ -25,6 +25,7 @@ public class SomeClass {
         System.out.println("Asynk method 2");
     }
 
+    @Init
     @Asynk
     public void sayAsynkTest2(){
         System.out.println("Asynk method 3");

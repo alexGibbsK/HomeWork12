@@ -17,21 +17,21 @@ public class Main {
         SomeClass someClass = new SomeClass();
         Class myClass = someClass.getClass();
         Method[] methods = myClass.getMethods();
-        System.out.println("Start of program threads count:" + ManagementFactory.getThreadMXBean().getThreadCount());
 
         if (myClass.isAnnotationPresent(Service.class)) {
             for (Method method :
                     methods) {
-                if (method.isAnnotationPresent(Init.class)) {
-                    method.invoke(myClass.newInstance(), null);
+                if (method.isAnnotationPresent(Init.class) && method.isAnnotationPresent(Asynk.class)) {
+                    System.out.println("Method must be Asynk OR Init, not both of them");
                 } else if (method.isAnnotationPresent(Asynk.class)) {
                     Thread myThread = getNewThread(myClass, method);
                     myThread.run();
+                } else if (method.isAnnotationPresent(Init.class)) {
+                    method.invoke(myClass.newInstance(), null);
                 }
             }
         }
 
-        System.out.println("End of program Threads count: " + ManagementFactory.getThreadMXBean().getThreadCount());
     }
 
     private static Thread getNewThread(final Class myClass, final Method method) {
